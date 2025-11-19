@@ -46,34 +46,10 @@ This project requires lucide-react for icons and a standard React setup.
 npm install
 npm install lucide-react
 
-
 Setup Tailwind CSS:
-This project relies heavily on Tailwind for styling.
+This project relies heavily on Tailwind for styling just follow the install guide
 
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-
-
-Update tailwind.config.js:
-
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-
-Update src/index.css:
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+https://tailwindcss.com/docs/installation/using-vite
 
 Run the Development Server:
 
