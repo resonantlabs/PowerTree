@@ -1,8 +1,8 @@
-Power Tree Designer
+# Power Tree Designer
 
 A web-based interactive tool for hardware engineers and system designers to visualize power distribution networks (Power Trees) and calculate system efficiency in real-time.
 
-⚡ Features
+## ⚡ Features
 
 Interactive Canvas: Drag and drop components (Batteries, DC/DC Converters, Loads) to organize your system architecture.
 
@@ -24,15 +24,15 @@ Converters: Adjust Output Voltage ($V_{out}$) and Efficiency ($\eta$).
 
 Loads: Set Current Draw ($I_{load}$).
 
-🚀 Getting Started
+## 🚀 Getting Started
 
-Prerequisites
+### Prerequisites
 
 Node.js (v14 or higher)
 
 npm or yarn
 
-Installation
+### Installation
 
 Clone the repository (or create a new Vite project):
 
