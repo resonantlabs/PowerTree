@@ -17,9 +17,10 @@ const NODE_TYPES = {
 const INITIAL_NODES = [
   { id: 'ac1', type: NODE_TYPES.SOURCE, x: 50, y: 250, label: 'QSW AC Source', data: { voltage: 90, powerMax: 200 } },
   
-  { id: 'bridge', type: NODE_TYPES.CONVERTER, x: 250, y: 250, label: 'Active Bridge', data: { vOut: 90, efficiency: 0.95 } },
-  { id: 'boost', type: NODE_TYPES.CONVERTER, x: 450, y: 250, label: 'Emulated Boost', data: { vOut: 160, efficiency: 0.95 } },
-  { id: 'resonant', type: NODE_TYPES.CONVERTER, x: 650, y: 250, label: 'Isolated Converter 24V', data: { vOut: 24, efficiency: 0.95 } },
+  { id: 'bridge', type: NODE_TYPES.CONVERTER, x: 250, y: 250, label: 'Active Bridge', data: { vOut: 90, efficiency: 0.98 } },
+  { id: 'boost', type: NODE_TYPES.CONVERTER, x: 450, y: 250, label: 'Emulated Boost', data: { vOut: 160, efficiency: 0.97 } },
+  { id: 'resonant24', type: NODE_TYPES.CONVERTER, x: 650, y: 250, label: 'Forward 24V', data: { vOut: 24, efficiency: 0.97 } },
+  { id: 'resonant34', type: NODE_TYPES.CONVERTER, x: 650, y: 350, label: 'Forward 34V', data: { vOut: 34, efficiency: 0.97 } },
 
   { id: 'dcdc1', type: NODE_TYPES.CONVERTER, x: 850, y: 200, label: 'Buck 12V', data: { vOut: 12, efficiency: 0.85 } },
   { id: 'dcdc2', type: NODE_TYPES.CONVERTER, x: 850, y: 300, label: 'Buck 5.75V', data: { vOut: 5.75, efficiency: 0.85 } },
@@ -28,17 +29,20 @@ const INITIAL_NODES = [
   { id: 'load1', type: NODE_TYPES.LOAD, x: 850, y: 100, label: '24V Load', data: { current: 4 } }, 
   { id: 'load2', type: NODE_TYPES.LOAD, x: 1050, y: 200, label: '12V Load', data: { current: 1 } },
   { id: 'load3', type: NODE_TYPES.LOAD, x: 1050, y: 300, label: '5.75V Load', data: { current: 1 } }, 
+  { id: 'load4', type: NODE_TYPES.LOAD, x: 850, y: 400, label: '34V Load', data: { current: 1 } }, 
 ];
 
 const INITIAL_EDGES = [
   { id: 'e1', source: 'ac1', target: 'bridge' },
   { id: 'e2', source: 'bridge', target: 'boost' },
-  { id: 'e3', source: 'boost', target: 'resonant' },
-  { id: 'e4', source: 'resonant', target: 'dcdc1' },
-  { id: 'e5', source: 'resonant', target: 'dcdc2' },
-  { id: 'e6', source: 'resonant', target: 'load1' },
-  { id: 'e7', source: 'dcdc1', target: 'load2' },
-  { id: 'e8', source: 'dcdc2', target: 'load3' }
+  { id: 'e3', source: 'boost', target: 'resonant24' },
+  { id: 'e4', source: 'boost', target: 'resonant34' },
+  { id: 'e5', source: 'resonant24', target: 'dcdc1' },
+  { id: 'e6', source: 'resonant24', target: 'dcdc2' },
+  { id: 'e7', source: 'resonant24', target: 'load1' },
+  { id: 'e8', source: 'dcdc1', target: 'load2' },
+  { id: 'e9', source: 'dcdc2', target: 'load3' },
+  { id: 'e10',source: 'resonant34', target: 'load4' }
 
 ];
 
