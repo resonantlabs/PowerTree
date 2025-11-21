@@ -44,3 +44,14 @@ https://tailwindcss.com/docs/installation/using-vite
 Run the Development Server:
 
     npm run dev
+
+Edit the Structure in the App.jsx
+
+    const INITIAL_NODES = [
+        { id: 'ac1', type: NODE_TYPES.SOURCE, x: 50, y: 250, label: 'QSW AC Source', data: { voltage: 90, powerMax: 200 } },
+        { id: 'inputcable', type: NODE_TYPES.CABLE, x: 50, y: 250, label: 'Input Cable', data: { resistance: 0.01 } } ]
+    
+
+    const INITIAL_EDGES = [
+        { id: 'e1', source: 'ac1', target: 'inputcable' },
+        { id: 'e2', source: 'inputcable', target: 'boost' } ]
