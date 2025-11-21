@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Zap, Settings, Activity, ArrowRight, Battery, AudioWaveform, CircuitBoard, Cpu, Save, Cable } from 'lucide-react';
+import { Zap, Settings, Activity, ArrowRight, Battery, AudioWaveform, CircuitBoard, Cpu, Save, Cable, LayoutGrid } from 'lucide-react';
 
 // --- Helper Types & Data ---
 
@@ -234,6 +234,64 @@ export default function PowerTreeDesigner() {
       return n;
     }));
   };
+  // --- Auto Layout Logic ---
+  const handleAutoLayout = () => {
+    const depths = {};
+    const newNodes = nodes.map(n => ({ ...n })); // Clone to avoid mutation issues
+
+    // Initialize roots (sources) to depth 0
+    newNodes.forEach(n => {
+      if (n.type === NODE_TYPES.SOURCE) depths[n.id] = 0;
+      else depths[n.id] = -1; // Unknown
+    });
+
+    // Simple relaxation to find depths (longest path in DAG)
+    // Run N times to propagate depths
+    for (let i = 0; i < newNodes.length; i++) {
+      edges.forEach(e => {
+        if (depths[e.source] !== -1) {
+          // Child depth is at least Parent + 1
+          const newDepth = depths[e.source] + 1;
+          if (newDepth > depths[e.target]) {
+            depths[e.target] = newDepth;
+          }
+        }
+      });
+    }
+
+    // Group by depth
+    const layers = [];
+    Object.entries(depths).forEach(([id, depth]) => {
+      const d = depth === -1 ? 0 : depth; // Default disconnected to 0
+      if (!layers[d]) layers[d] = [];
+      layers[d].push(id);
+    });
+
+    // Assign positions
+    const LAYER_WIDTH = 250;
+    const NODE_HEIGHT = 120;
+    const CANVAS_CENTER_Y = 350; // Approx center of visible area
+
+    layers.forEach((layerIds, depth) => {
+      // Sort nodes in layer to keep them somewhat stable? 
+      // For now, simple stable sort by ID or just keep existing order
+      layerIds.sort();
+
+      const layerHeight = layerIds.length * NODE_HEIGHT;
+      const startY = Math.max(50, CANVAS_CENTER_Y - (layerHeight / 2));
+
+      layerIds.forEach((nodeId, index) => {
+        const node = newNodes.find(n => n.id === nodeId);
+        if (node) {
+          node.x = 50 + (depth * LAYER_WIDTH);
+          node.y = startY + (index * NODE_HEIGHT);
+        }
+      });
+    });
+
+    setNodes(newNodes);
+  };
+
 
   // --- Rendering Components ---
 
@@ -267,10 +325,21 @@ export default function PowerTreeDesigner() {
 
       {/* --- Left Sidebar: Controls --- */}
       <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col shadow-xl z-10">
-        <div className="p-4 border-b border-gray-700">
-          <h1 className="text-xl font-bold flex items-center gap-2 text-green-400">
-            <Zap className="fill-current" /> PowerTree for GAP Node
-          </h1>
+
+        <div className="p-4 border-b border-gray-700 bg-gray-800/50">
+          <div className="flex items-center justify-between mb-3">
+            <h1 className="text-xl font-bold flex items-center gap-2 text-green-400">
+              <Zap className="fill-current" /> PowerTree
+            </h1>
+            {/* Auto Layout Button */}
+            <button
+              onClick={handleAutoLayout}
+              className="p-1.5 bg-gray-700 hover:bg-gray-600 rounded text-gray-300 transition-colors"
+              title="Auto Layout Nodes"
+            >
+              <LayoutGrid size={18} />
+            </button>
+          </div>
           {/* NEW: System Metrics Badge */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono bg-black/30 p-3 rounded-lg border border-gray-700 shadow-inner">
             <div className="text-gray-400 flex items-center">Efficiency:</div>
